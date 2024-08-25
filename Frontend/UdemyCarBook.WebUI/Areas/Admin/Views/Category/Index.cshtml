@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-wrapper">
+    <div class="content mt-0 p-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Blog Kategorileri Alanı</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body p-0">
+                                <div class="mailbox-controls">
+                                    <div class="card-sub">
+                                        Blog Kategorilerini bu sayfada görüntüleyebilir veya güncelleyebilirsiniz.
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <a href="/Admin/Category/Create/" class="btn btn-primary">Yeni Kategori Oluştur</a>
+                                    </div>
+                                </div>
+                                <table id="categoryTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Kategori Adı</th>
+                                            <th class="text-center">Sil</th>
+                                            <th class="text-center">Güncelle</th>
+                                            <th class="text-center">Kategoriye Ait Blogları</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="border-top"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @await Component.InvokeAsync("_AdminDatatableScriptPartial")
+
+    <script>
+        $(document).ready(function () {
+            $('#categoryTable').DataTable({
+                ajax: {
+                    url: '/Admin/Category/GetCategories',
+                    type: 'GET',
+                    dataSrc: function (json) {
+                        // Gelen veriyi konsola yazdır
+                        console.log(json);
+                        return json; // Veriyi tabloya ekle
+                    }
+                },
+                columns: [
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width:'50px',
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1; // Satır numarasını döndür (1 tabanlı)
+                        }
+                    },
+                    { data: 'name' },
+                   
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width: '150px',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Category/Delete/' + row.categoryID + '" class="btn btn-danger ">Sil</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width: '150px',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Category/Update/' + row.categoryID + '" class="btn btn-info ">Güncelle</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width: '300px',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Category/#/' + row.categoryID + '" class="btn btn-secondary">Kategoriye Ait Blogları</a>';
+                        }
+                    }
+                ],
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                responsive: true,
+                dom: 'Bfrtip',
+                language: dataTableLanguageSettings,
+                buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            });
+        });
+    </script>
+}

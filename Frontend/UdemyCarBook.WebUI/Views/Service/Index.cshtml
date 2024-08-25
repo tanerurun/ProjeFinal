@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "Hizmetler";
+    Layout = "~/Views/UILayout/Index.cshtml";
+}
+
+@model List<ResultServiceDTO>
+
+@await Component.InvokeAsync("_ServiceComponentPartial")
+
+@await Component.InvokeAsync("_BecomeADriverComponentPartial")
+

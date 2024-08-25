@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<div class="content-wrapper">
+    <div class="content mt-0 p-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Yazar Alanı</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body p-0">
+                                <div class="mailbox-controls">
+                                    <div class="card-sub">
+                                        Yazarları bu sayfada görüntüleyebilir veya güncelleyebilirsiniz.
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <a href="/Admin/Author/Create/" class="btn btn-primary">Yeni Yazar Oluştur</a>
+                                    </div>
+                                </div>
+                                <table id="authorsTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th >Ad Soyad</th>
+                                            <th >Açıklama</th>
+                                            <th class="text-center">Sil</th>
+                                            <th class="text-center">Güncelle</th>
+                                            <th class="text-center">Yazarın Blogları</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="border-top"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @await Component.InvokeAsync("_AdminDatatableScriptPartial")
+
+    <script>
+        $(document).ready(function () {
+            $('#authorsTable').DataTable({
+                ajax: {
+                    url: '/Admin/Author/GetAuthors',
+                    type: 'GET',
+                    dataSrc: function (json) {
+                        // Gelen veriyi konsola yazdır
+                        console.log(json);
+                        return json; // Veriyi tabloya ekle
+                    }
+                },
+                columns: [
+                    {
+                        data: null,
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1; // Satır numarasını döndür (1 tabanlı)
+                        }
+                    },
+                    { data: 'name'},
+                    { data: 'description' },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width: '150px',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Author/Delete/' + row.authorID + '" class="btn btn-danger btn-sm">Sil</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width: '150px',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Author/Update/' + row.authorID + '" class="btn btn-info btn-sm">Güncelle</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width:'200px',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Author/#/' + row.authorID + '" class="btn btn-secondary btn-sm">Yazarın Blogları</a>';
+                        }
+                    }
+                ],
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                responsive: true,
+                dom: 'Bfrtip',
+                language: dataTableLanguageSettings,
+                buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            });
+        });
+    </script>
+}

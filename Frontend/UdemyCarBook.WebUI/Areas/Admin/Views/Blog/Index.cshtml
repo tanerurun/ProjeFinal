@@ -1,0 +1,138 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="content-wrapper">
+    <div class="content mt-0 p-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Bloglar</div>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="card-body p-0">
+                                <div class="mailbox-controls">
+                                    <div class="card-sub">
+                                        Blogları bu sayfada görüntüleyebilir veya güncelleyebilirsiniz.
+                                    </div>
+                                    <br />
+                                    <div>
+                                        <a href="/Admin/Blog/Create/" class="btn btn-primary">Yeni Blog Oluştur</a>
+                                    </div>
+                                </div>
+
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th >#</th>
+                                            <th >Başlık</th>
+                                            <th >Yazar Adı</th>
+                                            <th >Yazar Açıklama</th>
+                                            <th >Kategori</th>
+                                            <th class="text-center">Sil</th>
+                                            <th class="text-center">Güncelle</th>
+                                            <th class="text-center">Bloga Git</th>
+                                            <th class="text-center">Yorumlar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @await Component.InvokeAsync("_AdminDatatableScriptPartial")
+
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                ajax: {
+                    url: '/Admin/Blog/GetBlogs',
+                    type: 'GET',
+                    dataSrc: function (json) {
+                        // Gelen veriyi konsola yazdır
+                        console.log(json);
+                        return json; // Veriyi tabloya ekle
+                    }
+                },
+                columns: [
+                    {
+                        data: null,
+                        className: 'text-center',
+                        width: '50px',
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1; // Satır numarasını döndür (1 tabanlı)
+                        }
+                    },
+                    { data: 'title' },
+                    { data: 'authorName' },
+                    { data: 'authorDescription' },
+                    { data: 'categoryName' },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Blog/Delete/' + row.blogID + '" class="btn btn-danger btn-sm">Sil</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Blog/Update/' + row.blogID + '" class="btn btn-info btn-sm">Güncelle</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Blog/#/' + row.blogID + '" class="btn btn-secondary btn-sm">Bloğa Git</a>';
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return '<a href="/Admin/Comment/Index/' + row.blogID + '" class="btn btn-warning btn-sm">Yorumlar</a>';
+                        }
+                    }
+                ],
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                responsive: true,
+                dom: 'Bfrtip',
+                language: dataTableLanguageSettings,
+                buttons: ["copy", "csv", "excel", "print", "colvis",
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape', // Set the orientation to landscape
+                        pageSize: 'A4', // Set the page size to A4
+                        title: 'Blog Listesi', // Optional: Set a custom title for the PDF
+                        exportOptions: {
+                            columns: ':visible' // Export only visible columns
+                        },
+                        customize: function (doc) {
+                            doc.content[1].margin = [0, 0, 0, 0]; // Set margins
+                        }
+                    }]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,265 @@
+﻿@model List<ResultLast5CarsWithBrandsDto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .users-lists {
+        padding-left: 0;
+        list-style: none;
+    }
+
+        .users-lists li {
+            float: left;
+            padding: 12px;
+            text-align: center;
+        }
+
+            .users-lists li img {
+                height: auto;
+                width: 11rem;
+            }
+
+    #map {
+        height: 400px;
+        width: 100%;
+        padding: 2rem;
+        margin-bottom:1rem; 
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="content mt-0 p-2">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Dashboard</h1>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            @await Component.InvokeAsync("_AdminDashboardCardsComponentPartial")
+            <div class="row>">
+
+                <div id="map"></div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Aylık Rapor</h5>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fas fa-wrench"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <a href="#" class="dropdown-item">Action</a>
+                                        <a href="#" class="dropdown-item">Another action</a>
+                                        <a href="#" class="dropdown-item">Something else here</a>
+                                        <a class="dropdown-divider"></a>
+                                        <a href="#" class="dropdown-item">Separated link</a>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p class="text-center">
+                                        <strong>Satışlar:  @DateTime.Now.ToShortDateString() - @DateTime.Now.AddMonths(1).ToShortDateString()</strong>
+                                    </p>
+
+                                    <div class="chart">
+                                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                        <!-- Sales Chart Canvas -->
+                                        <canvas id="salesChart" height="180" style="height: 180px; display: block; width: 721px;" width="721" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                    <!-- /.chart-responsive -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-md-4">
+                                    <p class="text-center">
+                                        <strong>Hedefler</strong>
+                                    </p>
+
+                                    <div class="progress-group">
+                                        Araç Kiralama
+                                        <span class="float-right"><b>160</b>/200</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+
+                                    <div class="progress-group">
+                                        Lokasyon Açma
+                                        <span class="float-right"><b>310</b>/400</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-danger" style="width: 75%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        <span class="progress-text">Siteden Kiralama </span>
+                                        <span class="float-right"><b>480</b>/800</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-success" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- /.progress-group -->
+                                    <div class="progress-group">
+                                        Hasarsızlık
+                                        <span class="float-right"><b>250</b>/500</span>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-warning" style="width: 50%"></div>
+                                        </div>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- ./card-body -->
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
+                                        <h5 class="description-header">123.000 ₺ </h5>
+                                        <span class="description-text">TOPLAM GİDER</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span>
+                                        <h5 class="description-header">233.000 ₺</h5>
+                                        <span class="description-text">TOPLAM KAZANÇ</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block border-right">
+                                        <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
+                                        <h5 class="description-header">110.000 ₺</h5>
+                                        <span class="description-text">TOPLAM CİRO</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 col-6">
+                                    <div class="description-block">
+                                        <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>
+                                        <h5 class="description-header">1200</h5>
+                                        <span class="description-text">ARAÇ KİRALAMA HEDEFİ</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        var ctx = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz'], 
+                datasets: [
+                    {
+                        label: 'Satışlar', 
+                        data: [65, 59, 80, 81, 56, 55, 40], 
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)', 
+                        borderColor: 'rgba(75, 192, 192, 1)', 
+                        borderWidth: 1, 
+                        fill: true
+                    },
+                    {
+                        label: 'Hedefler', 
+                        data: [70, 65, 85, 90, 60, 60, 50], 
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)', 
+                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        borderWidth: 1, 
+                        fill: true // 
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true 
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        // Türkiye haritasını gösterecek şekilde haritayı başlatıyoruz
+        var map = L.map('map', {
+            center: [39.925533, 32.866287], // Türkiye'nin merkezi
+            zoom: 6, // Başlangıç zoom seviyesi
+            minZoom: 6, // En fazla uzaklaşma seviyesi
+            maxZoom: 10 // En fazla yakınlaşma seviyesi
+        });
+
+        // OpenStreetMap tile layer'ı ekliyoruz
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var customIcon = L.icon({
+            iconUrl: '/carbook-master/images/ico.png', // Burada kendi ikon URL'inizi kullanın
+            iconSize: [38, 38], // İkonun boyutu
+            iconAnchor: [19, 38], // İkonun haritadaki sabitlenme noktası
+            popupAnchor: [0, -38] // Pop-up'ın açılacağı yer
+        });
+
+        // Şehirler için marker'ları ekliyoruz
+        var locations = [
+            { name: "İstanbul", coords: [41.0082, 28.9784] },
+            { name: "Bursa", coords: [40.1828, 29.0665] },
+            { name: "İzmir", coords: [38.4237, 27.1428] },
+            { name: "Ankara", coords: [39.9334, 32.8597] },
+            { name: "Antalya", coords: [36.8969, 30.7133] }
+        ];
+
+        // Marker'ları haritaya ekliyoruz
+        locations.forEach(function (location) {
+            L.marker(location.coords, { icon: customIcon }).addTo(map)
+                .bindPopup(location.name + ' Şubesi')
+                .openPopup();
+        });
+    </script>
+}
